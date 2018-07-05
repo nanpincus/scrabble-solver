@@ -1,0 +1,34 @@
+<!doctype html>
+<title>Scrabble Solver</title>
+
+<script>
+// Send the lookup request to Node server by hitting the URL <currentURL>/lookup/<scrabbleTiles>
+function lookUp() {
+  let scrabbleTiles = document.getElementById("solve_scrabble_hand").value;
+  let currentURL = window.location.href;
+
+  // Every time the button is clicked, clean out the list of words
+  document.getElementById("word_list").innerHTML = "";
+
+  // Look up the valid Scrabble words that can be made from each hand of tiles then add them to our list of words
+  fetch(currentURL + "lookup/" + scrabbleTiles)
+	  .then(function (response) { // Once we get the response, parse it as JSON
+		  return response.json();
+		})
+		.then(function (data) { // After we parse the response, add each entry in the "words" array to our list
+		  data.words.forEach(function(word) {
+
+		  	let listItem = document.createElement("li");
+
+		  	listItem.appendChild(document.createTextNode(word))
+
+		  	document.getElementById("word_list").appendChild(listItem);
+		  });
+		});
+}
+</script>
+
+<h2> Scrabble Solver</h2>
+<input type="solve_scrabble_hand" id="solve_scrabble_hand">
+<button onclick="lookUp()">Get words</button>
+<ul id="word_list"><ul>
